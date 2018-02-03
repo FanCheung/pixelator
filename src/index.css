@@ -3,3 +3,15 @@ body {
   padding: 0;
   font-family: sans-serif;
 }
+canvas {
+  image-rendering: optimizeSpeed;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: -o-crisp-edges;
+  image-rendering: crisp-edges;
+  -ms-interpolation-mode: nearest-neighbor;
+  image-rendering: pixelated;
+}
+#sprite{
+  /* filter: contrast(150%); */
+}

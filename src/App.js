@@ -1,8 +1,8 @@
 import React, {Component} from 'react'
-import {Observable,Subject} from 'rxjs/Rx'
+import {Observable, Subject} from 'rxjs/Rx'
 import logo from './logo.svg'
+import 'color-convert'
 import './App.css'
-
 
 class App extends Component {
   constructor() {
@@ -10,52 +10,103 @@ class App extends Component {
   }
 
   componentDidMount() {
+    const BLOCK_SIZE = 2
+    const WIDTH = 64
+    const HEIGHT = 64
+    const reader = new FileReader()
+    let image = new Image()
+    let {preview, sprite} = this
 
-    this.reader = new FileReader()
-    this.image = new Image()
+    // set sprite to pixel art dimension
+    sprite.height = HEIGHT;
+    sprite.width = WIDTH;
 
-    this.reader.onload = (e) => {
-      this.image.src = e.target.result;
+    const context = preview.getContext('2d')
+    const contextSprite = sprite.getContext('2d')
+
+    contextSprite.mozImageSmoothingEnabled = false;
+    contextSprite.webkitImageSmoothingEnabled = false;
+    contextSprite.imageSmoothingEnabled = false;
+
+    reader.onload = (e) => {
+      image.src = e.target.result;
     }
 
-    this.context = this
-      .canvas
-      .getContext('2d')
+    image.onload = (img) => {
+      clear()
+      preview.height = image.height
+      preview.width = image.width
 
-    this.image.onload = () => {
-      console.log(this.image.height)
-      this
-        .context
-        .clearRect(0, 0, this.canvas.width, this.canvas.height)
-      this.canvas.height = this.image.height
-      this.canvas.width = this.image.width
-      this
-        .context
-        .drawImage(this.image, 0, 0, this.canvas.width, this.canvas.height)
+      let trimmedDemension = 0
+      trimmedDemension = (image.width < image.height)
+        ? image.width
+        : image.height
+
+      contextSprite.drawImage(image, 0, 0, trimmedDemension, trimmedDemension, 0, 0, HEIGHT / BLOCK_SIZE, WIDTH / BLOCK_SIZE)
+      contextSprite.drawImage(sprite, 0, 0, WIDTH / BLOCK_SIZE, HEIGHT / BLOCK_SIZE, 0, 0, WIDTH, HEIGHT)
+      context.drawImage(image, 0, 0, preview.width, preview.height)
+
     }
 
+    const round256 = (colorData) => {}
+    const clear = () => context.clearRect(0, 0, preview.width, preview.height)
     document
       .querySelector('#file-upload')
       .addEventListener('change', (event) => {
         let file = event.target.files[0];
-        // is image
         if (file.type.indexOf("image") === 0) {
-          this
-            .reader
-            .readAsDataURL(file);
+          reader.readAsDataURL(file);
         }
       });
   }
 
-  componentWillUnmount() {}
+  eidtorMode() {}
 
+  buildGrid(canvas, gridPixelSize, gridColor, gridGap) {
+
+    var ctx = canvas.getContext('2d');
+    ctx.lineWidth = 0.5;
+    ctx.strokeStyle = gridColor;
+
+    for (var i = 0; i <= canvas.height; i = i + gridPixelSize) {
+      ctx.beginPath();
+      ctx.moveTo(0, i);
+      ctx.lineTo(canvas.width, i);
+      if (i % parseInt(gridGap) == 0) {
+        ctx.lineWidth = 2;
+      } else {
+        ctx.lineWidth = 0.5;
+      }
+
+      ctx.closePath();
+      ctx.stroke();
+    }
+
+    for (var j = 0; j <= canvas.width; j = j + gridPixelSize) {
+      ctx.beginPath();
+      ctx.moveTo(j, 0);
+      ctx.lineTo(j, canvas.height);
+      if (j % parseInt(gridGap) == 0) {
+        ctx.lineWidth = 2;
+      } else {
+        ctx.lineWidth = 0.5;
+      }
+      ctx.closePath();
+      ctx.stroke();
+    }
+    var uri = canvas.toDataURL('image/png');
+    $('#draw-bg').css('background-image', 'url(' + uri + ')');
+
+  }
+  componentWillUnmount() {}
   render() {
     return (
       <div className="App">
         <p className="App-intro">
           To get started, edit and save to reload.
         </p>
-        <canvas id="pic" ref={el => this.canvas = el}></canvas>
+        <canvas id="pic" ref={el => this.preview = el}></canvas>
+        <canvas id="sprite" ref={el => this.sprite = el}></canvas>
         <input type="file" id="file-upload"/>
       </div>
     );
