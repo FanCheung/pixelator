@@ -1,8 +1,8 @@
 import React, {Component} from 'react'
 import {Observable, Subject} from 'rxjs/Rx'
 import logo from './logo.svg'
-import 'color-convert'
 import './App.css'
+var convert = require('color-convert');
 
 class App extends Component {
   constructor() {
@@ -44,7 +44,43 @@ class App extends Component {
 
       contextSprite.drawImage(image, 0, 0, trimmedDemension, trimmedDemension, 0, 0, HEIGHT / BLOCK_SIZE, WIDTH / BLOCK_SIZE)
       contextSprite.drawImage(sprite, 0, 0, WIDTH / BLOCK_SIZE, HEIGHT / BLOCK_SIZE, 0, 0, WIDTH, HEIGHT)
-      context.drawImage(image, 0, 0, preview.width, preview.height)
+      // context.drawImage(image, 0, 0, preview.width, preview.height) round to 256
+      let colorData = contextSprite
+        .getImageData(0, 0, WIDTH, HEIGHT)
+        .data
+
+      let data = colorData.reduce((acc, curr, index, arr) => {
+        // let key = Math.floor(index / 4)
+
+        acc
+          .temp
+          .push(curr)
+        if (acc.temp.length === 4) {
+          const ansi = convert
+            .rgb
+            .ansi256(...acc.temp)
+
+          const rounded = convert
+            .ansi256
+            .rgb(ansi)
+            .concat(255)
+
+          acc.data = acc
+            .data
+            .concat(rounded)
+          acc.temp = []
+        }
+
+        return acc
+      }, {
+        temp: [],
+        data: []
+
+      }).data
+      console.log(colorData.length)
+      console.log(data.length)
+      var imageData = new ImageData(new Uint8ClampedArray(data), HEIGHT, WIDTH)
+      contextSprite.putImageData(imageData, 0, 0)
 
     }
 
@@ -94,8 +130,8 @@ class App extends Component {
       ctx.closePath();
       ctx.stroke();
     }
-    var uri = canvas.toDataURL('image/png');
-    $('#draw-bg').css('background-image', 'url(' + uri + ')');
+    // var uri = canvas.toDataURL('image/png');
+    // $('#draw-bg').css('background-image', 'url(' + uri + ')');
 
   }
   componentWillUnmount() {}
