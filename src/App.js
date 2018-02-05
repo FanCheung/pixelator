@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import {Observable, Subject} from 'rxjs/Rx'
 import logo from './logo.svg'
 import './App.css'
+import * as CanvasHelper from './canvas-helper'
 var convert = require('color-convert');
 
 class App extends Component {
@@ -10,18 +11,21 @@ class App extends Component {
   }
 
   componentDidMount() {
-    const BLOCK_SIZE = 2
-    const WIDTH = 64
-    const HEIGHT = 64
+
+    const RESOLUTION = 32
+    const BLOCK_SIZE = 1
+
+    const WIDTH = 32
+    const HEIGHT = 32
+
     const reader = new FileReader()
     let image = new Image()
-    let {preview, sprite} = this
+    let {sprite} = this
 
     // set sprite to pixel art dimension
-    sprite.height = HEIGHT;
-    sprite.width = WIDTH;
+    sprite.height = HEIGHT * 2;
+    sprite.width = WIDTH * 2;
 
-    const context = preview.getContext('2d')
     const contextSprite = sprite.getContext('2d')
 
     contextSprite.mozImageSmoothingEnabled = false;
@@ -33,25 +37,24 @@ class App extends Component {
     }
 
     image.onload = (img) => {
-      clear()
-      preview.height = image.height
-      preview.width = image.width
-
+      // clear() preview.height = image.height preview.width = image.width
       let trimmedDemension = 0
       trimmedDemension = (image.width < image.height)
         ? image.width
         : image.height
 
       contextSprite.drawImage(image, 0, 0, trimmedDemension, trimmedDemension, 0, 0, HEIGHT / BLOCK_SIZE, WIDTH / BLOCK_SIZE)
-      contextSprite.drawImage(sprite, 0, 0, WIDTH / BLOCK_SIZE, HEIGHT / BLOCK_SIZE, 0, 0, WIDTH, HEIGHT)
+      // contextSprite.drawImage(sprite, 0, 0, WIDTH / BLOCK_SIZE, HEIGHT /
+      // BLOCK_SIZE, 0, 0, WIDTH, HEIGHT)
+      contextSprite.drawImage(sprite, 0, 0, RESOLUTION, RESOLUTION, 0, 0, WIDTH * 2, HEIGHT * 2)
       // context.drawImage(image, 0, 0, preview.width, preview.height) round to 256
       let colorData = contextSprite
         .getImageData(0, 0, WIDTH, HEIGHT)
         .data
 
+      // TODO: remove temp and improve algorithm
       let data = colorData.reduce((acc, curr, index, arr) => {
         // let key = Math.floor(index / 4)
-
         acc
           .temp
           .push(curr)
@@ -77,15 +80,19 @@ class App extends Component {
         data: []
 
       }).data
-      console.log(colorData.length)
-      console.log(data.length)
+
       var imageData = new ImageData(new Uint8ClampedArray(data), HEIGHT, WIDTH)
       contextSprite.putImageData(imageData, 0, 0)
+      window
+        .localStorage
+        .setItem('sprite', JSON.stringify(imageData))
 
+      //   window.requestAnimationFrame = (function () {     return
+      // window.requestAnimationFrame || window.webkitRequestAnimationFrame ||
+      // window.mozRequestAnimationFrame || function (callback) {
+      // window.setTimeout(callback, 1000 / 60);     }; })();
     }
 
-    const round256 = (colorData) => {}
-    const clear = () => context.clearRect(0, 0, preview.width, preview.height)
     document
       .querySelector('#file-upload')
       .addEventListener('change', (event) => {
@@ -94,59 +101,35 @@ class App extends Component {
           reader.readAsDataURL(file);
         }
       });
+
+    CanvasHelper.drawGrid()
   }
 
   eidtorMode() {}
+  // var uri = canvas.toDataURL('image/png');
+  // $('#draw-bg').css('background-image', 'url(' + uri + ')');
 
-  buildGrid(canvas, gridPixelSize, gridColor, gridGap) {
-
-    var ctx = canvas.getContext('2d');
-    ctx.lineWidth = 0.5;
-    ctx.strokeStyle = gridColor;
-
-    for (var i = 0; i <= canvas.height; i = i + gridPixelSize) {
-      ctx.beginPath();
-      ctx.moveTo(0, i);
-      ctx.lineTo(canvas.width, i);
-      if (i % parseInt(gridGap) == 0) {
-        ctx.lineWidth = 2;
-      } else {
-        ctx.lineWidth = 0.5;
-      }
-
-      ctx.closePath();
-      ctx.stroke();
-    }
-
-    for (var j = 0; j <= canvas.width; j = j + gridPixelSize) {
-      ctx.beginPath();
-      ctx.moveTo(j, 0);
-      ctx.lineTo(j, canvas.height);
-      if (j % parseInt(gridGap) == 0) {
-        ctx.lineWidth = 2;
-      } else {
-        ctx.lineWidth = 0.5;
-      }
-      ctx.closePath();
-      ctx.stroke();
-    }
-    // var uri = canvas.toDataURL('image/png');
-    // $('#draw-bg').css('background-image', 'url(' + uri + ')');
-
-  }
   componentWillUnmount() {}
   render() {
     return (
-      <div className="App">
-        <p className="App-intro">
-          To get started, edit and save to reload.
-        </p>
-        <canvas id="pic" ref={el => this.preview = el}></canvas>
-        <canvas id="sprite" ref={el => this.sprite = el}></canvas>
+      <div className="app">
+      {/* control the conversion scale */}
+        <label>Resolution
+          <input
+            type="range"
+            ref={el => this.resolution = el}
+            name="resolution"
+            max="4"
+            max="7"/>
+        </label>
+
+        <canvas id="sprite" ref= { el => this.sprite = el }></canvas >
         <input type="file" id="file-upload"/>
+        <section id="editor">
+          <canvas ></canvas>
+        </section>
       </div>
-    );
+    )
   }
 }
-
 export default App;
