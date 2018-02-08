@@ -11,6 +11,7 @@ canvas {
   image-rendering: crisp-edges;
   -ms-interpolation-mode: nearest-neighbor;
   image-rendering: pixelated;
+  filter: contrast(120%);
 }
 #sprite{
   /* filter: contrast(150%); */
