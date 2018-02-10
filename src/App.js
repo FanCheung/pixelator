@@ -1,9 +1,16 @@
+import code from './worker'
 import React, {Component} from 'react'
 import {Observable, Subject} from 'rxjs/Rx'
 import logo from './logo.svg'
 import './App.css'
 import * as CanvasHelper from './canvas-helper'
 var convert = require('color-convert');
+
+const blob = new Blob([code], {type: "application/javascript"});
+const work = new Worker(URL.createObjectURL(blob));
+
+work.onmessage = (m) => {};
+work.postMessage('')
 
 class App extends Component {
   constructor() {
@@ -94,7 +101,6 @@ class App extends Component {
         data: []
       }).data
       return new ImageData(new Uint8ClampedArray(data), width, height)
-
     }
 
     const drawPixels = (obj, scale, blockSize) => {

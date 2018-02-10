@@ -3,8 +3,8 @@ import {Observable, Subject} from 'rxjs/Rx'
 import logo from './logo.svg'
 import './App.css'
 import * as CanvasHelper from './canvas-helper'
-var convert = require('color-convert');
 
+var convert = require('color-convert');
 const fromEvent = Observable.fromEvent;
 const from = Observable.from;
 const of = Observable.of;
@@ -36,6 +36,7 @@ export const Editor = (props) => {
         return fromEvent(reader, 'load').map(e => e.target.result)
 
     }
+
     let scaleChange = fromEvent(this.scale, 'change').map(e => e.target.value)
 
     let imageLoaded = (imageData) => {
