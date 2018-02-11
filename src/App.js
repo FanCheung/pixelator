@@ -20,14 +20,16 @@ export class App extends Component {
     super()
     this.onImageLoaded$ = new Subject()
     this.state = {
-      imageSrc: ''
+      imageSrc: '',
+      pixelData: ''
     }
   }
 
   componentDidMount() {
     this
       .onImageLoaded$
-      .map((e) => this.setState({imageSrc: e})).subscribe()
+      .map((e) => this.setState({imageSrc: e}))
+      .subscribe()
   }
   // var uri = canvas.toDataURL('image/png');
   // $('#draw-bg').css('background-image', 'url(' + uri + ')');
@@ -43,7 +45,9 @@ export class App extends Component {
           onImageLoaded={e => this
           .onImageLoaded$
           .next(e)}/>}/>
-        <Route path="/pixelate" component={Pixelator}/>
+        <Route
+          path="/pixelate"
+          render={() => <Pixelator pixelData={this.state.pixelData}/>}/>
       </Switch>
     )
   }
