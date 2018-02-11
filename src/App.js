@@ -9,7 +9,6 @@ import {File} from './file'
 import {Pixelator} from './pixelator'
 
 var convert = require('color-convert');
-
 const blob = new Blob([code], {type: "application/javascript"});
 const work = new Worker(URL.createObjectURL(blob));
 
@@ -19,50 +18,33 @@ work.postMessage('')
 export class App extends Component {
   constructor() {
     super()
-    this.onFileChange$ = new Subject()
-
-    this.state={imageSrc:''} 
+    this.onImageLoaded$ = new Subject()
+    this.state = {
+      imageSrc: ''
+    }
   }
 
   componentDidMount() {
     this
-      .onFileChange$
-      .map(e => e.target.files[0])
-      .switchMap(file => this.readerFile(file))
-      .do 
-        (imageData => this.setState({imageSrc: imageData})).subscribe(console.dir)
-
-      }
-      imageLoaded(imageData) {
-        const image = new Image()
-        image.src = imageData
-        // return fromEvent(image, 'load').map(e => e.target)
-      }
-
-      readerFile(file) {
-        let reader = new FileReader()
-        reader.readAsDataURL(file)
-        return Observable
-          .fromEvent(reader, 'load')
-          .map(e => e.target.result)
-      }
-
-      // var uri = canvas.toDataURL('image/png');
-      // $('#draw-bg').css('background-image', 'url(' + uri + ')');
-      render() {
-        console.log(this.state)
-        return (
-          <Switch>
-            <Route path="/editor" render={() => Editor}/>
-            <Route
-              path="/"
-              render={() => <File
-              imageSrc={this.state.imageSrc}
-              onFileChange={e => this
-              .onFileChange$
-              .next(e)}/>}/>
-            <Route path="/pixelate" component={Pixelator}/>
-          </Switch>
-        )
-      }
+      .onImageLoaded$
+      .map((e) => this.setState({imageSrc: e})).subscribe()
   }
+  // var uri = canvas.toDataURL('image/png');
+  // $('#draw-bg').css('background-image', 'url(' + uri + ')');
+  render() {
+    console.log(this.state)
+    return (
+      <Switch>
+        <Route path="/editor" render={() => Editor}/>
+        <Route
+          path="/"
+          render={() => <File
+          imageSrc={this.state.imageSrc}
+          onImageLoaded={e => this
+          .onImageLoaded$
+          .next(e)}/>}/>
+        <Route path="/pixelate" component={Pixelator}/>
+      </Switch>
+    )
+  }
+}

@@ -5,7 +5,6 @@ import logo from './logo.svg'
 import * as CanvasHelper from './canvas-helper'
 
 var convert = require('color-convert');
-
 const blob = new Blob([code], {type: "application/javascript"});
 const work = new Worker(URL.createObjectURL(blob));
 
@@ -160,16 +159,14 @@ export class Pixelator extends Component {
               ref={el => this.blockSize = el}
               name="block-size"
               min="1"
-              max="3"/>
+              max="3" change=""/>
           </label>
           <label>
             Scale
             <input type="range" ref={el => this.scale = el} name="scale" min="1" max="5"/>
           </label>
         </section>
-
         <canvas id="sprite" ref={el => this.sprite = el}></canvas >
-        <input type="file" ref= { el => this.fileUpload = el } id="file-upload"/>
         <section id="editor"></section>
 
       </div>
