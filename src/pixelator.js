@@ -12,28 +12,25 @@ work.onmessage = (m) => {};
 work.postMessage('')
 
 export const Pixelator = (props) => {
+    const onCanvasReady = new Subject()
+    onCanvasReady.subscribe(console.warn)
 
-    const fromEvent = Observable.fromEvent;
-    const from = Observable.from;
-    const of = Observable.of;
-    // config().map((e) => e)
-    const resolution = 32
-    let minDimension = 64
-    // set sprite to pixel art dimension
-    const ctxSprite = this
-        .sprite
-        .getContext('2d');
-    let scale = 1
-    let blockSize = 1
+    const config = () => {
+        const fromEvent = Observable.fromEvent;
+        const from = Observable.from;
+        const of = Observable.of;
+        // config().map((e) => e)
+        const resolution = 32
+        let minDimension = 64
+        // set sprite to pixel art dimension
+        const ctxSprite = sprite.getContext('2d');
+        let scale = 1
+        let blockSize = 1
 
-    ctxSprite.mozImageSmoothingEnabled = false;
-    ctxSprite.webkitImageSmoothingEnabled = false;
-    ctxSprite.imageSmoothingEnabled = false;
-
-    let fileUploaded = Observable
-        .fromEvent(this.fileUpload, 'change')
-        .map(e => e.target.files[0])
-
+        ctxSprite.mozImageSmoothingEnabled = false;
+        ctxSprite.webkitImageSmoothingEnabled = false;
+        ctxSprite.imageSmoothingEnabled = false;
+    }
     let getOptimisedDimension = (image) => {
         let ratio = image.width / image.height;
         return ratio > 1
@@ -125,7 +122,7 @@ export const Pixelator = (props) => {
                 blockSize={blockSize}
                 onScaleChange={(e) => onScaleChange.next(e)}
                 onBlockSizeChange={(e) => onBlockSizeChange.next(e)}/>
-            <canvas id="sprite"></canvas >
+            <canvas id="sprite" ref={(e) => onCanvasReady.next(e)}></canvas >
             <img src={props.pixelData}/>
         </section>
     )

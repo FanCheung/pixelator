@@ -38,15 +38,14 @@ export class App extends Component {
     return (
       <Switch>
         <Route path="/editor" render={() => Editor}/>
-        <Route
+        <Route exact
           path="/"
           render={() => <File
           imageSrc={this.state.imageSrc}
           onImageLoaded={e => this
           .onImageLoaded$
           .next(e)}/>}/>
-        <Route
-          path="/pixelate"
+        <Route exact path="/pixelate"
           render={() => <Pixelator pixelData={this.state.pixelData}/>}/>
       </Switch>
     )

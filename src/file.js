@@ -34,7 +34,7 @@ export const File = (props) => {
             <img src={props.imageSrc} id="preview"/>
             <input type="file" onChange={(e) => onFileChange$.next(e)} id="file-upload"/>
             <div class="adjustment"></div>
-            <Link to='/pixelator'>Pixelate It</Link>
+            <Link to='/pixelate'>Pixelate It</Link>
         </section>
     )
 }
