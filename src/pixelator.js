@@ -16,6 +16,7 @@ const work = new Worker(URL.createObjectURL(blob));
 work.onmessage = (m) => { };
 work.postMessage('')
 
+
 export const Pixelator = (props) => {
     const onCanvasReady$ = new Subject()
     let scale = 1
@@ -54,6 +55,7 @@ export const Pixelator = (props) => {
     }
 
     const drawPixels = ({ sprite, obj, scale, blockSize }) => {
+
         const { width, height } = obj.dimension
         const image = obj.image
         // add blocksize, this will compute correct shrinked size for pixel enlargement
@@ -64,23 +66,22 @@ export const Pixelator = (props) => {
         sprite.height = height * (2 ** scale)
 
         const ctx = sprite.getContext('2d')
-        ctx.drawImage(image, 0, 0, image.width, image.height, 0, 0, shrinkWidth, shrinkHeight)
 
-        const imageData = getImageData256(sprite, shrinkWidth, shrinkHeight)
-        ctx.putImageData(imageData, 0, 0)
-
-        // pixelize it
-        ctx.mozImageSmoothingEnabled = false;
-        ctx.webkitImageSmoothingEnabled = false;
-        ctx.imageSmoothingEnabled = false;
-
-        ctx.drawImage(sprite, 0, 0, shrinkWidth, shrinkHeight, 0, 0, width * (2 ** scale), height * (2 ** scale))
+        window.requestAnimationFrame(() => {
+            ctx.drawImage(image, 0, 0, image.width, image.height, 0, 0, shrinkWidth, shrinkHeight)
+            const imageData = getImageData256(sprite, shrinkWidth, shrinkHeight)
+            ctx.putImageData(imageData, 0, 0)
+            // pixelize it
+            ctx.mozImageSmoothingEnabled = false;
+            ctx.webkitImageSmoothingEnabled = false;
+            ctx.imageSmoothingEnabled = false;
+            ctx.drawImage(sprite, 0, 0, shrinkWidth, shrinkHeight, 0, 0, width * (2 ** scale), height * (2 ** scale))
+        })
         console.log(shrinkWidth, shrinkHeight, blockSize, width, height, scale)
 
-        // JSON.stringify(imageData)) window.requestAnimationFrame = (function () {
-        // return window.requestAnimationFrame || window.webkitRequestAnimationFrame ||
-        // window.mozRequestAnimationFrame || function (callback) {
-        // window.setTimeout(callback, 1000 / 60);     }; })();
+        // JSON.stringify(imageData)) 
+
+
     }
     // CanvasHelper.drawGrid() var uri = canvas.toDataURL('image/png');
     // $('#draw-bg').css('background-image', 'url(' + uri + ')');
@@ -92,9 +93,9 @@ export const Pixelator = (props) => {
         return Observable
             .of(props.image)
             .map(image => ({ dimension: getOptimisedDimension(image), image }))
-            .switchMap((obj) => blockSize$.combineLatest(scale$), (obj, [blockSize, scale]) => drawPixels({ obj, scale, blockSize, ctx, sprite }))
+            .switchMap((obj) => blockSize$.combineLatest(scale$).debounceTime(500),
+                (obj, [blockSize, scale]) => drawPixels({ obj, scale, blockSize, ctx, sprite }))
     }).subscribe()
-
     return (
         <section>
             <section className="setting">
@@ -106,10 +107,11 @@ export const Pixelator = (props) => {
                         min="1"
                         max="6"
                         step="1"
-                        ref={(e) => e
-                            ? e.value = blockSize
-                            : ''}
-                        onChange={(e) => blockSize$.next(e.target.value)} />
+                        defaultValue={blockSize}
+                        onChange={(e) => {
+                            blockSize$.next(e.target.value)
+                            value = e.target.value
+                        }} />
                 </label>
                 <label>
                     Scale
@@ -118,9 +120,7 @@ export const Pixelator = (props) => {
                         name="scale"
                         min="1"
                         max="3"
-                        ref={(e) => e
-                            ? e.value = scale
-                            : ''}
+                        defaultValue={scale}
                         onChange={(e) => scale$.next(e.target.value)} />
                 </label>
             </section>
