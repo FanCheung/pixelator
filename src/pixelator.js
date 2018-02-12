@@ -1,14 +1,9 @@
 // TODO: settings in a sperate component
 import code from './worker'
-import React, { Component } from 'react'
+import React from 'react'
 import { Observable, Subject, BehaviorSubject } from 'rxjs/Rx'
-import logo from './logo.svg'
-import * as CanvasHelper from './canvas-helper'
+import { Link } from 'react-router-dom'
 var convert = require('color-convert');
-
-const fromEvent = Observable.fromEvent;
-const from = Observable.from;
-const of = Observable.of;
 
 const blob = new Blob([code], { type: "application/javascript" });
 const work = new Worker(URL.createObjectURL(blob));
@@ -78,14 +73,10 @@ export const Pixelator = (props) => {
             ctx.drawImage(sprite, 0, 0, shrinkWidth, shrinkHeight, 0, 0, width * (2 ** scale), height * (2 ** scale))
         })
         console.log(shrinkWidth, shrinkHeight, blockSize, width, height, scale)
-
         // JSON.stringify(imageData)) 
-
-
     }
     // CanvasHelper.drawGrid() var uri = canvas.toDataURL('image/png');
     // $('#draw-bg').css('background-image', 'url(' + uri + ')');
-
     onCanvasReady$.switchMap(sprite => {
         if (!props.image.src || !sprite)
             return Observable.never()
@@ -96,6 +87,10 @@ export const Pixelator = (props) => {
             .switchMap((obj) => blockSize$.combineLatest(scale$).debounceTime(500),
                 (obj, [blockSize, scale]) => drawPixels({ obj, scale, blockSize, ctx, sprite }))
     }).subscribe()
+    const openEditor = () => {
+
+    }
+
     return (
         <section>
             <section className="setting">
@@ -108,10 +103,7 @@ export const Pixelator = (props) => {
                         max="6"
                         step="1"
                         defaultValue={blockSize}
-                        onChange={(e) => {
-                            blockSize$.next(e.target.value)
-                            value = e.target.value
-                        }} />
+                        onChange={(e) => blockSize$.next(e.target.value)} />
                 </label>
                 <label>
                     Scale
@@ -125,7 +117,8 @@ export const Pixelator = (props) => {
                 </label>
             </section>
             <canvas id="sprite" ref={(e) => onCanvasReady$.next(e)}></canvas >
-            <img src={props.pixelData} />
+            <button onClick={() => openEditor()}>Open in Editor</button>
+            {/* <img src={props.pixelData}  /> */}
         </section>
     )
 }

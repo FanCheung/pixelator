@@ -33,12 +33,11 @@ export const File = (props) => {
             .fromEvent(reader, 'load').do(console.warn)
             .map(e => e.target.result)
     }
-
     return (
         <section>
-            <img src={props.imageSrc} id="preview" />
             <input type="file" onChange={(e) => onFileChange$.next(e)} id="file-upload" />
             <div className="adjustment"></div>
+            <img src={props.imageSrc} alt="preview" id="preview" />
             <Link to='/pixelate'>Pixelate It</Link>
         </section>
     )

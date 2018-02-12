@@ -1,6 +1,6 @@
 import code from './worker'
 import React, { Component } from 'react'
-import { Observable, Subject } from 'rxjs/Rx'
+import { Subject } from 'rxjs/Rx'
 import './App.css'
 import * as CanvasHelper from './canvas-helper'
 import { Switch, BrowserRouter, Route } from 'react-router-dom'
@@ -9,10 +9,10 @@ import { File } from './file'
 import { Pixelator } from './pixelator'
 
 window.requestAnimationFrame = (function () {
-    return window.requestAnimationFrame || window.webkitRequestAnimationFrame ||
-        window.mozRequestAnimationFrame || function (callback) {
-            window.setTimeout(callback, 1000 / 60);
-        };
+  return window.requestAnimationFrame || window.webkitRequestAnimationFrame ||
+    window.mozRequestAnimationFrame || function (callback) {
+      window.setTimeout(callback, 1000 / 60);
+    };
 })();
 
 var convert = require('color-convert');
@@ -28,7 +28,7 @@ export class App extends Component {
     this.onImageLoaded$ = new Subject()
     this.onScaleChange$ = new Subject()
     this.onBlockSizeChange$ = new Subject()
-    this.onCanvasReady$=new Subject()
+    this.onCanvasReady$ = new Subject()
     this.state = {
       image: {}
     }
