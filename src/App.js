@@ -51,7 +51,7 @@ export class App extends Component {
         <Route exact path="/pixelate"
           render={() => <Pixelator image={this.state.image}
             scale={1}
-            blockSize={1}
+            blockSize={2}
           />} />
       </Switch>
     )
