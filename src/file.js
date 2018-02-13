@@ -34,9 +34,12 @@ export const File = (props) => {
             .map(e => e.target.result)
     }
 
+
     return (
         <section>
             <img src={props.imageSrc} id="preview" />
+            <button>Upload</button>
+            <button>From camera</button>
             <input type="file" onChange={(e) => onFileChange$.next(e)} id="file-upload" />
             <div className="adjustment"></div>
             <Link to='/pixelate'>Pixelate It</Link>

@@ -20,8 +20,8 @@ export const Pixelator = (props) => {
     const onCanvasReady$ = new Subject()
     let scale = 1
     let blockSize = 1
-    const resolution = 32
-    let minDimension = 64
+    const resolution =32 
+
     const blockSize$ = new BehaviorSubject(blockSize)
     const scale$ = new BehaviorSubject(scale)
 
@@ -110,7 +110,7 @@ export const Pixelator = (props) => {
                         type="range"
                         name="block-size"
                         min="1"
-                        max="3"
+                        max="6"
                         ref={(e) => e ? e.value = blockSize : ''}
                         onChange={(e) => blockSize$.next(e.target.value)} />
                 </label>
