@@ -7,6 +7,7 @@ import { Switch, BrowserRouter, Route } from 'react-router-dom'
 import { Editor } from './editor'
 import { File } from './file'
 import { Pixelator } from './pixelator'
+import { CameraCapture } from './camera-capture'
 
 window.requestAnimationFrame = (function () {
   return window.requestAnimationFrame || window.webkitRequestAnimationFrame ||
@@ -47,6 +48,7 @@ export class App extends Component {
     return (
       <Switch>
         <Route path="/editor" render={() => Editor} />
+        <Route path="/camera-capture" render={() => <CameraCapture/>} />
         <Route exact
           path="/"
           render={() => <File
