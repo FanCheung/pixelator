@@ -47,10 +47,11 @@ export class App extends Component {
     console.log(this.state)
     return (
       <Switch>
+        <Route path="/start" render={() => <CameraCapture/>} />
         <Route path="/editor" render={() => Editor} />
         <Route path="/camera-capture" render={() => <CameraCapture/>} />
         <Route exact
-          path="/"
+          path="/file-upload"
           render={() => <File
             imageSrc={this.state.image.src}
             onImageLoaded={e => this
