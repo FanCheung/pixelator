@@ -8,6 +8,7 @@ import { Editor } from './editor'
 import { File } from './file'
 import { Pixelator } from './pixelator'
 import { CameraCapture } from './camera-capture'
+import {Start } from './start'
 
 window.requestAnimationFrame = (function () {
   return window.requestAnimationFrame || window.webkitRequestAnimationFrame ||
@@ -47,9 +48,11 @@ export class App extends Component {
     console.log(this.state)
     return (
       <Switch>
-        <Route path="/start" render={() => <CameraCapture/>} />
         <Route path="/editor" render={() => Editor} />
-        <Route path="/camera-capture" render={() => <CameraCapture/>} />
+        <Route path="/camera-capture" 
+        render={() => <CameraCapture
+        onImageLoaded={(e)=>this.onImageLoaded$.next(e)}  
+        />} />
         <Route exact
           path="/file-upload"
           render={() => <File
@@ -62,7 +65,9 @@ export class App extends Component {
             scale={1}
             blockSize={2}
           />} />
+        <Route path="/" render={() => <Start/>} />
       </Switch>
+
     )
   }
 }
