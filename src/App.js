@@ -1,12 +1,20 @@
 import code from './worker'
 import React, { Component } from 'react'
-import { Observable, Subject } from 'rxjs/Rx'
+import { Subject } from 'rxjs/Rx'
 import './App.css'
 import * as CanvasHelper from './canvas-helper'
 import { Switch, BrowserRouter, Route } from 'react-router-dom'
 import { Editor } from './editor'
 import { File } from './file'
 import { Pixelator } from './pixelator'
+import { CameraCapture } from './camera-capture'
+
+window.requestAnimationFrame = (function () {
+  return window.requestAnimationFrame || window.webkitRequestAnimationFrame ||
+    window.mozRequestAnimationFrame || function (callback) {
+      window.setTimeout(callback, 1000 / 60);
+    };
+})();
 
 var convert = require('color-convert');
 const blob = new Blob([code], { type: "application/javascript" });
@@ -21,8 +29,7 @@ export class App extends Component {
     this.onImageLoaded$ = new Subject()
     this.onScaleChange$ = new Subject()
     this.onBlockSizeChange$ = new Subject()
-    this.onCanvasReady$=new Subject()
-
+    this.onCanvasReady$ = new Subject()
     this.state = {
       image: {}
     }
@@ -40,9 +47,11 @@ export class App extends Component {
     console.log(this.state)
     return (
       <Switch>
+        <Route path="/start" render={() => <CameraCapture/>} />
         <Route path="/editor" render={() => Editor} />
+        <Route path="/camera-capture" render={() => <CameraCapture/>} />
         <Route exact
-          path="/"
+          path="/file-upload"
           render={() => <File
             imageSrc={this.state.image.src}
             onImageLoaded={e => this
@@ -51,7 +60,7 @@ export class App extends Component {
         <Route exact path="/pixelate"
           render={() => <Pixelator image={this.state.image}
             scale={1}
-            blockSize={1}
+            blockSize={2}
           />} />
       </Switch>
     )

@@ -1,14 +1,9 @@
 // TODO: settings in a sperate component
 import code from './worker'
-import React, { Component } from 'react'
+import React from 'react'
 import { Observable, Subject, BehaviorSubject } from 'rxjs/Rx'
-import logo from './logo.svg'
-import * as CanvasHelper from './canvas-helper'
+import { Link } from 'react-router-dom'
 var convert = require('color-convert');
-
-const fromEvent = Observable.fromEvent;
-const from = Observable.from;
-const of = Observable.of;
 
 const blob = new Blob([code], { type: "application/javascript" });
 const work = new Worker(URL.createObjectURL(blob));
@@ -16,31 +11,26 @@ const work = new Worker(URL.createObjectURL(blob));
 work.onmessage = (m) => { };
 work.postMessage('')
 
+
 export const Pixelator = (props) => {
     const onCanvasReady$ = new Subject()
     let scale = 1
     let blockSize = 1
-    const resolution =32 
 
+    const resolution = 16
     const blockSize$ = new BehaviorSubject(blockSize)
     const scale$ = new BehaviorSubject(scale)
 
     let getOptimisedDimension = (image) => {
         let ratio = image.width / image.height;
-        return ratio > 1
-            ? {
-                height: resolution,
-                width: Math.floor(ratio * resolution)
-            }
-            : {
-                width: resolution,
-                height: Math.floor(resolution / ratio)
-            }
+        return ratio > 1 ?
+            { height: resolution, width: Math.floor(ratio * resolution) }
+            : { width: resolution, height: Math.floor(resolution / ratio) }
     }
 
     const getImageData256 = (sprite, width, height) => {
-        let colorData = sprite.getContext('2d')
-            .getImageData(0, 0, width, height).data
+        let colorData = sprite.getContext('2d').getImageData(0, 0, width, height)
+            .data
         // TODO: remove temp and improve algorithm
         let data = colorData.reduce((acc, curr, index, arr) => {
             // let key = Math.floor(index / 4)
@@ -61,73 +51,76 @@ export const Pixelator = (props) => {
     }
 
     const drawPixels = ({ sprite, obj, scale, blockSize }) => {
+
         const { width, height } = obj.dimension
         const image = obj.image
         // add blocksize, this will compute correct shrinked size for pixel enlargement
-        let shrinkWidth = Math.floor(width / blockSize)
-        let shrinkHeight = Math.floor(height / blockSize)
-        sprite.width = width * scale
-        sprite.height = height * scale
+        let shrinkWidth = Math.floor(width * (2 ** scale) / blockSize)
+        let shrinkHeight = Math.floor(height * (2 ** scale) / blockSize)
+
+        sprite.width = width * (2 ** scale)
+        sprite.height = height * (2 ** scale)
 
         const ctx = sprite.getContext('2d')
-        ctx.drawImage(image, 0, 0, image.width, image.height, 0, 0, shrinkWidth, shrinkHeight)
 
-        const imageData = getImageData256(sprite, shrinkWidth, shrinkHeight)
-        ctx.putImageData(imageData, 0, 0)
-
-        // pixelize it 
-        ctx.mozImageSmoothingEnabled = false;
-        ctx.webkitImageSmoothingEnabled = false;
-        ctx.imageSmoothingEnabled = false;
-
-        ctx.drawImage(sprite, 0, 0, shrinkWidth, shrinkHeight, 0, 0, width * scale, height * scale)
+        window.requestAnimationFrame(() => {
+            ctx.drawImage(image, 0, 0, image.width, image.height, 0, 0, shrinkWidth, shrinkHeight)
+            const imageData = getImageData256(sprite, shrinkWidth, shrinkHeight)
+            ctx.putImageData(imageData, 0, 0)
+            // pixelize it
+            ctx.mozImageSmoothingEnabled = false;
+            ctx.webkitImageSmoothingEnabled = false;
+            ctx.imageSmoothingEnabled = false;
+            ctx.drawImage(sprite, 0, 0, shrinkWidth, shrinkHeight, 0, 0, width * (2 ** scale), height * (2 ** scale))
+        })
         console.log(shrinkWidth, shrinkHeight, blockSize, width, height, scale)
-
-        // JSON.stringify(imageData)) window.requestAnimationFrame = (function () {
-        // return window.requestAnimationFrame || window.webkitRequestAnimationFrame ||
-        // window.mozRequestAnimationFrame || function (callback) {
-        // window.setTimeout(callback, 1000 / 60);     }; })();
+        // JSON.stringify(imageData)) 
     }
     // CanvasHelper.drawGrid() var uri = canvas.toDataURL('image/png');
     // $('#draw-bg').css('background-image', 'url(' + uri + ')');
-
     onCanvasReady$.switchMap(sprite => {
         if (!props.image.src || !sprite)
             return Observable.never()
         const ctx = sprite.getContext('2d');
-        return Observable.of(props.image)
+        return Observable
+            .of(props.image)
             .map(image => ({ dimension: getOptimisedDimension(image), image }))
-            .switchMap((obj) => blockSize$.combineLatest(scale$),
-            (obj, [blockSize, scale]) => drawPixels({ obj, scale, blockSize, ctx, sprite }))
+            .switchMap((obj) => blockSize$.combineLatest(scale$).debounceTime(500),
+                (obj, [blockSize, scale]) => drawPixels({ obj, scale, blockSize, ctx, sprite }))
     }).subscribe()
+    const openEditor = () => {
+
+    }
 
     return (
         <section>
             <section className="setting">
                 <label>
                     Block size
-                <input
+                    <input
                         type="range"
                         name="block-size"
                         min="1"
                         max="6"
                         ref={(e) => e ? e.value = blockSize : ''}
+                        step="1"
+                        defaultValue={blockSize}
                         onChange={(e) => blockSize$.next(e.target.value)} />
                 </label>
                 <label>
                     Scale
-                <input
+                    <input
                         type="range"
                         name="scale"
                         min="1"
-                        max="5"
-                        ref={(e) => e ? e.value = scale : ''}
+                        max="3"
+                        defaultValue={scale}
                         onChange={(e) => scale$.next(e.target.value)} />
                 </label>
             </section>
             <canvas id="sprite" ref={(e) => onCanvasReady$.next(e)}></canvas >
-            <img src={props.pixelData} />
+            <button onClick={() => openEditor()}>Open in Editor</button>
+            {/* <img src={props.pixelData}  /> */}
         </section>
     )
 }
-
