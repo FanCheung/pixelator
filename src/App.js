@@ -3,19 +3,19 @@ import React, { Component } from 'react'
 import { Subject } from 'rxjs/Rx'
 import './App.css'
 import * as CanvasHelper from './canvas-helper'
-import { Switch, BrowserRouter, Route } from 'react-router-dom'
+import { Switch, BrowserRouter,withRouter, Route } from 'react-router-dom'
 import { Editor } from './editor'
 import { File } from './file'
 import { Pixelator } from './pixelator'
 import { CameraCapture } from './camera-capture'
 import {Start } from './start'
-
-window.requestAnimationFrame = (function () {
-  return window.requestAnimationFrame || window.webkitRequestAnimationFrame ||
-    window.mozRequestAnimationFrame || function (callback) {
-      window.setTimeout(callback, 1000 / 60);
-    };
-})();
+import {BrowserHistory} from 'react-router'
+// window.requestAnimationFrame = (function () {
+//   return window.requestAnimationFrame || window.webkitRequestAnimationFrame ||
+//     window.mozRequestAnimationFrame || function (callback) {
+//       window.setTimeout(callback, 1000 / 60);
+//     };
+// })();
 
 var convert = require('color-convert');
 const blob = new Blob([code], { type: "application/javascript" });
@@ -48,8 +48,8 @@ export class App extends Component {
     console.log(this.state)
     return (
      <main> 
-       <section class="nav">
-       <button>Back</button>
+       <section className="nav">
+       <Back/>
       </section>
       <Switch>
         <Route path="/editor" render={() => Editor} />
@@ -73,3 +73,6 @@ export class App extends Component {
     )
   }
 }
+
+const Back=withRouter(({ history }) => (
+  <button onClick={history.goBack}>Back</button>))

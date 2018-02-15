@@ -3,10 +3,11 @@ import { Observable } from 'rxjs/Rx'
 import { Redirect } from 'react-router-dom'
 
 export class CameraCapture extends Component {
+    state = { captured: false, a: 'k' }
     saved = false
+
     constructor(props) {
         super(props)
-        this.state = { captured: false, a: 'k' }
     }
 
     componentDidMount() {
@@ -16,7 +17,9 @@ export class CameraCapture extends Component {
 
         this.capture = () => {
             const context = this.canvas.getContext('2d');
-            console.log(this.player)
+            
+            console.dir(this.player)
+            debugger;
             context.drawImage(this.player, 0, 0, this.canvas.width, this.canvas.height)
             this.imageData = this.canvas.toDataURL()
             this.setState({ captured: true })

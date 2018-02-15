@@ -89,7 +89,6 @@ export const Pixelator = (props) => {
                 (obj, [blockSize, scale]) => drawPixels({ obj, scale, blockSize, ctx, sprite }))
     }).subscribe()
     const openEditor = () => {
-
     }
 
     return (
