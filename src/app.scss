@@ -1,15 +1,68 @@
+
+@import url('https://fonts.googleapis.com/css?family=Pacifico|VT323');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+
+$bg:#181C39;
+$primary:#8FE1D5 ;
+$secondary:#EC3D71;
+$font-color:rgba(white,0.9);
+
+body{
+  background:$bg;
+  color:$font-color;
+  font-size:16px;
+}
+h1{
+  font-size:58px;
+  // font-family: 'VT323', monospace;
+  font-family: 'Pacifico', cursive;
+
+  }
+#page-camera-capture{
+  text-align:center;
+  video{width:100%;}
+  canvas{display:none;}
+ button i{font-size:36px;} 
+button{padding:15px; border-radius:50%;}
+}
+
+.nav{position:absolute;}
+.btn,button{
+  margin:10px;
+  text-align:center;
+  display:inline-block;
+  padding:10px 20px;
+  text-decoration:none;
+  font-size:12px;
+  letter-spacing: 0.05em;
+  border-radius: 20px;
+  font-weight:bold;
+  border:none;
+  background:$secondary;
+  text-transform: uppercase;
+  color:white;
+  &:active{ }
+}
+
+#page-start{
+  header{
+    margin:40px;
+  }
+  text-align:center;
+  .btn{
+    display:block;
+    margin:10px 40px;
+  }
+}
+
 .App {
   text-align: center;
 }
-
 .App-logo {
   animation: App-logo-spin infinite 20s linear;
   height: 80px;
 }
 
-.App-intro {
-  font-size: large;
-}
 
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }

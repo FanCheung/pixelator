@@ -1,12 +1,58 @@
+@import url("https://fonts.googleapis.com/css?family=Pacifico|VT323");
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+body {
+  background: #181C39;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 16px; }
+
+h1 {
+  font-size: 58px;
+  font-family: 'Pacifico', cursive; }
+
+#page-camera-capture {
+  text-align: center; }
+  #page-camera-capture video {
+    width: 100%; }
+  #page-camera-capture canvas {
+    display: none; }
+  #page-camera-capture button i {
+    font-size: 36px; }
+  #page-camera-capture button {
+    padding: 15px;
+    border-radius: 50%; }
+
+.nav {
+  position: absolute; }
+
+.btn, button {
+  margin: 10px;
+  text-align: center;
+  display: inline-block;
+  padding: 10px 20px;
+  text-decoration: none;
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  border-radius: 20px;
+  font-weight: bold;
+  border: none;
+  background: #EC3D71;
+  text-transform: uppercase;
+  color: white; }
+
+#page-start {
+  text-align: center; }
+  #page-start header {
+    margin: 40px; }
+  #page-start .btn {
+    display: block;
+    margin: 10px 40px; }
+
 .App {
   text-align: center; }
 
 .App-logo {
   animation: App-logo-spin infinite 20s linear;
   height: 80px; }
-
-.App-intro {
-  font-size: large; }
 
 @keyframes App-logo-spin {
   from {

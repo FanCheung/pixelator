@@ -4,11 +4,18 @@ import { Link } from 'react-router-dom'
 export class Start extends React.Component {
     render() {
         return (
-            <section>
+            <section id="page-start">
+                <header>
                 <h1>Pixelator</h1>
-                <span> square your pictures </span>
-                <Link to='/file-upload'>Upload an image</Link>
-                <Link to='/camera-capture'> Take a picture</Link>
+                <span> have fun in making pixel art </span>
+                </header>
+
+                <Link className="btn" role="button"
+                    to='/file-upload'>
+                        Upload an image
+                </Link>
+                <Link className="btn" role="button"
+                to='/camera-capture' className="btn"> Take a picture</Link>
             </section>
 
         )

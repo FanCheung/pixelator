@@ -17,9 +17,6 @@ export class CameraCapture extends Component {
 
         this.capture = () => {
             const context = this.canvas.getContext('2d');
-            
-            console.dir(this.player)
-            debugger;
             context.drawImage(this.player, 0, 0, this.canvas.width, this.canvas.height)
             this.imageData = this.canvas.toDataURL()
             this.setState({ captured: true })
@@ -49,20 +46,26 @@ export class CameraCapture extends Component {
         if (this.saved)
             return <Redirect to="/pixelate" />
         return (
-            <section>
+            <section id="page-camera-capture">
                 <video className=""
-                    id="player" width="480" height="480" ref={el => this.player = el} autoPlay="true"></video>
+                    id="player" ref={el => this.player = el} autoPlay="true"></video>
                 <canvas className="" id="canvas" ref={el => this.canvas = el} width="320" height="240" ></canvas>
                 {this.state.captured ?
                     <div>
-                        <button id="save-image" onClick={() => this.saveImage()}>Pixelate it</button>
-                        <button id="cancel" onClick={() => this.cancel()}>Cancel</button>
+                        <button id="save-image" onClick={() => this.saveImage()}>
+                            <i class="material-icons">check</i>
+                        </button>
+                        <button id="cancel" className="secondary" onClick={() => this.cancel()}>
+                            <i class="material-icons">close</i>
+                        </button>
                     </div>
                     :
                     <div>
-                        <button id="capture" ref={el => this.capture = el} onClick={() => this.capture()}>Capture</button>
+                        <button id="capture" onClick={() => this.capture()}>
+                            <i class="material-icons">photo_camera</i>
+                        </button>
                     </div>}
-            </section >
+            </section>
         )
     }
 }

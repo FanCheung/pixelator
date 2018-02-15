@@ -1,7 +1,6 @@
 import React from 'react'
 
 const Adjustment = () => {
-
     return
     <section>
         <label>Contrast</label>
