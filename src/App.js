@@ -38,7 +38,7 @@ export class App extends Component {
 
   componentDidMount() {
     this
-      .onImageLoaded$.do(console.info)
+      .onImageLoaded$
       .map((e) => this.setState({ image: e }))
       .subscribe()
   }
@@ -47,6 +47,10 @@ export class App extends Component {
   render() {
     console.log(this.state)
     return (
+     <main> 
+       <section class="nav">
+       <button>Back</button>
+      </section>
       <Switch>
         <Route path="/editor" render={() => Editor} />
         <Route path="/camera-capture" 
@@ -57,9 +61,7 @@ export class App extends Component {
           path="/file-upload"
           render={() => <File
             imageSrc={this.state.image.src}
-            onImageLoaded={e => this
-              .onImageLoaded$
-              .next(e)} />} />
+            onImageLoaded={e => this.onImageLoaded$.next(e)} />} />
         <Route exact path="/pixelate"
           render={() => <Pixelator image={this.state.image}
             scale={1}
@@ -67,7 +69,7 @@ export class App extends Component {
           />} />
         <Route path="/" render={() => <Start/>} />
       </Switch>
-
+      </main>
     )
   }
 }

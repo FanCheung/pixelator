@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import { Observable } from 'rxjs/Rx'
-export class CameraCapture extends Component {
+import { Redirect } from 'react-router-dom'
 
+export class CameraCapture extends Component {
+    saved = false
     constructor(props) {
         super(props)
         this.state = { captured: false, a: 'k' }
@@ -21,7 +23,16 @@ export class CameraCapture extends Component {
         }
 
         this.saveImage = () => {
-            this.props.onImageLoaded(this.imageData)
+            let image = new Image()
+            image.onload = () => {
+                this.props.onImageLoaded(image)
+            }
+            image.src = this.imageData
+            this.saved = true
+        }
+
+        this.cancel = () => {
+            this.setState({ captured: false })
         }
 
         navigator.mediaDevices.getUserMedia({
@@ -32,6 +43,8 @@ export class CameraCapture extends Component {
     }
 
     render() {
+        if (this.saved)
+            return <Redirect to="/pixelate" />
         return (
             <section>
                 <video className=""
@@ -39,8 +52,8 @@ export class CameraCapture extends Component {
                 <canvas className="" id="canvas" ref={el => this.canvas = el} width="320" height="240" ></canvas>
                 {this.state.captured ?
                     <div>
-                        <button id="convert" ref={el => this.convert = el} onClick={() => this.saveImage()}>Pixelate it</button>
-                        <button id="cancel" ref={el => this.cancel = el} onClick={() => this.cancel()}>Cancel</button>
+                        <button id="save-image" onClick={() => this.saveImage()}>Pixelate it</button>
+                        <button id="cancel" onClick={() => this.cancel()}>Cancel</button>
                     </div>
                     :
                     <div>

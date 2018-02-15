@@ -11,7 +11,6 @@ const work = new Worker(URL.createObjectURL(blob));
 work.onmessage = (m) => { };
 work.postMessage('')
 
-
 export const Pixelator = (props) => {
     const onCanvasReady$ = new Subject()
     let scale = 1
@@ -79,6 +78,7 @@ export const Pixelator = (props) => {
     // CanvasHelper.drawGrid() var uri = canvas.toDataURL('image/png');
     // $('#draw-bg').css('background-image', 'url(' + uri + ')');
     onCanvasReady$.switchMap(sprite => {
+        console.log(props)
         if (!props.image.src || !sprite)
             return Observable.never()
         const ctx = sprite.getContext('2d');
