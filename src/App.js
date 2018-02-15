@@ -1,7 +1,7 @@
 import code from './worker'
 import React, { Component } from 'react'
 import { Subject } from 'rxjs/Rx'
-import './App.css'
+import './app.scss'
 import * as CanvasHelper from './canvas-helper'
 import { Switch, BrowserRouter,withRouter, Route } from 'react-router-dom'
 import { Editor } from './editor'
@@ -10,6 +10,7 @@ import { Pixelator } from './pixelator'
 import { CameraCapture } from './camera-capture'
 import {Start } from './start'
 import {BrowserHistory} from 'react-router'
+
 // window.requestAnimationFrame = (function () {
 //   return window.requestAnimationFrame || window.webkitRequestAnimationFrame ||
 //     window.mozRequestAnimationFrame || function (callback) {
@@ -25,13 +26,14 @@ work.onmessage = (m) => { };
 work.postMessage('')
 
 export class App extends Component {
+  onImageLoaded$ = new Subject()
+  onScaleChange$ = new Subject()
+  onBlockSizeChange$ = new Subject()
+  onCanvasReady$ = new Subject()
+
   constructor() {
     super()
-    this.onImageLoaded$ = new Subject()
-    this.onScaleChange$ = new Subject()
-    this.onBlockSizeChange$ = new Subject()
-    this.onCanvasReady$ = new Subject()
-    this.state = {
+        this.state = {
       image: {}
     }
   }
