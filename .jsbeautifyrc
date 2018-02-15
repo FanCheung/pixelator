@@ -1,8 +1,0 @@
-{
-    "js": {
-        "preserve-newlines": true,
-        "break_chained_methods": false,
-        "break-chained-methods": false
-    },
-    "break_chained_methods": false
-}

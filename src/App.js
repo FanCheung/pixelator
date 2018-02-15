@@ -3,13 +3,13 @@ import React, { Component } from 'react'
 import { Subject } from 'rxjs/Rx'
 import './app.scss'
 import * as CanvasHelper from './canvas-helper'
-import { Switch, BrowserRouter,withRouter, Route } from 'react-router-dom'
+import { Switch, BrowserRouter, withRouter, Route } from 'react-router-dom'
 import { Editor } from './editor'
 import { File } from './file'
 import { Pixelator } from './pixelator'
 import { CameraCapture } from './camera-capture'
-import {Start } from './start'
-import {BrowserHistory} from 'react-router'
+import { Start } from './start'
+import { BrowserHistory } from 'react-router'
 
 // window.requestAnimationFrame = (function () {
 //   return window.requestAnimationFrame || window.webkitRequestAnimationFrame ||
@@ -33,7 +33,7 @@ export class App extends Component {
 
   constructor() {
     super()
-        this.state = {
+    this.state = {
       image: {}
     }
   }
@@ -49,32 +49,35 @@ export class App extends Component {
   render() {
     console.log(this.state)
     return (
-     <main> 
-       <section className="nav">
-       <Back/>
-      </section>
-      <Switch>
-        <Route path="/editor" render={() => Editor} />
-        <Route path="/camera-capture" 
-        render={() => <CameraCapture
-        onImageLoaded={(e)=>this.onImageLoaded$.next(e)}  
-        />} />
-        <Route exact
-          path="/file-upload"
-          render={() => <File
-            imageSrc={this.state.image.src}
-            onImageLoaded={e => this.onImageLoaded$.next(e)} />} />
-        <Route exact path="/pixelate"
-          render={() => <Pixelator image={this.state.image}
-            scale={1}
-            blockSize={2}
-          />} />
-        <Route path="/" render={() => <Start/>} />
-      </Switch>
+      <main>
+        <nav className="nav">
+          <Back/>
+        </nav>
+        <Switch>
+          <Route path="/editor" render={() => Editor} />
+          <Route path="/camera-capture"
+            render={() => <CameraCapture
+              onImageLoaded={(e) => this.onImageLoaded$.next(e)}
+            />} />
+          <Route exact
+            path="/file-upload"
+            render={() => <File
+              imageSrc={this.state.image.src}
+              onImageLoaded={e => this.onImageLoaded$.next(e)} />} />
+          <Route exact path="/pixelate"
+            render={() => <Pixelator image={this.state.image}
+              scale={1}
+              blockSize={2}
+            />} />
+          <Route path="/" render={() => <Start />} />
+        </Switch>
       </main>
     )
   }
 }
 
-const Back=withRouter(({ history }) => (
-  <button onClick={history.goBack}>Back</button>))
+const Back = withRouter(({ history }) => (
+  <button className="back"
+    onClick={history.goBack}>
+    <i class="material-icons">chevron_left</i>
+  </button>))

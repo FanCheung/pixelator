@@ -92,10 +92,13 @@ export const Pixelator = (props) => {
     }
 
     return (
-        <section>
-            <section className="setting">
-                <label>
-                    Block size
+        <section id="page-pixelate">
+            <canvas id="sprite" ref={(e) => onCanvasReady$.next(e)}></canvas >
+            <div class="setting">
+                <div>
+                    <label>
+                        Block size
+                    </label>
                     <input
                         type="range"
                         name="block-size"
@@ -105,9 +108,11 @@ export const Pixelator = (props) => {
                         step="1"
                         defaultValue={blockSize}
                         onChange={(e) => blockSize$.next(e.target.value)} />
-                </label>
-                <label>
-                    Scale
+                </div>
+                <div>
+                    <label>
+                        Scale
+                    </label>
                     <input
                         type="range"
                         name="scale"
@@ -115,11 +120,9 @@ export const Pixelator = (props) => {
                         max="3"
                         defaultValue={scale}
                         onChange={(e) => scale$.next(e.target.value)} />
-                </label>
-            </section>
-            <canvas id="sprite" ref={(e) => onCanvasReady$.next(e)}></canvas >
+                </div>
+            </div>
             <button onClick={() => openEditor()}>Open in Editor</button>
-            {/* <img src={props.pixelData}  /> */}
         </section>
     )
 }
