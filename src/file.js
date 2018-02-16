@@ -1,9 +1,7 @@
 import React from 'react';
 import { Observable, Subject } from 'rxjs/Rx'
 import { Link } from 'react-router-dom'
-/**
- * 
- */
+
 export const File = (props) => {
     const onFileChange$ = new Subject()
 
@@ -35,10 +33,17 @@ export const File = (props) => {
     }
     return (
         <section>
-            <input type="file" onChange={(e) => onFileChange$.next(e)} id="file-upload" />
             <div className="adjustment"></div>
-            <img src={props.imageSrc} alt="preview" id="preview" />
-            <Link to='/pixelate'>Pixelate It</Link>
+            <figure>
+                <img src={props.imageSrc} id="preview" />
+            </figure>
+            {props.imageSrc ?
+                <Link to='/pixelate'><button>Pixelate It</button></Link>
+                :
+                <div>
+                    <input type="file" className="file-upload" onChange={(e) => onFileChange$.next(e)} id="file-upload" />
+                    <label htmlFor="file" className="btn">Choose a file</label>
+                </div>}
         </section>
     )
 }

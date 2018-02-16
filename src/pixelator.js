@@ -92,7 +92,7 @@ export const Pixelator = (props) => {
     }
 
     return (
-        <section id="page-pixelate">
+        <section>
             <canvas id="sprite" ref={(e) => onCanvasReady$.next(e)}></canvas >
             <div class="setting">
                 <div>

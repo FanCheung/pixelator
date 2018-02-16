@@ -46,7 +46,7 @@ export class CameraCapture extends Component {
         if (this.saved)
             return <Redirect to="/pixelate" />
         return (
-            <section id="page-camera-capture">
+            <section>
                 <video className=""
                     id="player" ref={el => this.player = el} autoPlay="true"></video>
                 <canvas className="" id="canvas" ref={el => this.canvas = el} width="320" height="240" ></canvas>

@@ -47,11 +47,13 @@ export class App extends Component {
   // var uri = canvas.toDataURL('image/png');
   // $('#draw-bg').css('background-image', 'url(' + uri + ')');
   render() {
-    console.log(this.state)
+    console.log(this.props, this.state)
+    let pageName = this.props.location.pathname.replace('/', '')
+    if (!pageName.length) pageName = 'home'
     return (
-      <main>
+      <main id={'page-'+pageName}>
         <nav className="nav">
-          <Back/>
+          <Back />
         </nav>
         <Switch>
           <Route path="/editor" render={() => Editor} />
@@ -79,5 +81,5 @@ export class App extends Component {
 const Back = withRouter(({ history }) => (
   <button className="back"
     onClick={history.goBack}>
-    <i class="material-icons">chevron_left</i>
+    <i className="material-icons">chevron_left</i>
   </button>))

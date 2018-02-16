@@ -2,11 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import {App} from './App';
-import { BrowserRouter} from 'react-router-dom'
+import {withRouter, BrowserRouter} from 'react-router-dom'
 import registerServiceWorker from './registerServiceWorker';
+const RouterApp = withRouter(props => <App {...props}/>);
+
 ReactDOM.render(
     <BrowserRouter>
-    <App>
-    </App>
+    <RouterApp/>
 </BrowserRouter>, document.getElementById('root'))
 registerServiceWorker()

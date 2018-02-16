@@ -59,22 +59,20 @@ label {
 
 button.back {
   background: none;
-  padding: 10px; }
+  padding: 0px; }
 
-#page-start {
-  text-align: center; }
-  #page-start .btn {
-    display: block;
-    margin: 10px 40px; }
+#page-home nav {
+  display: none; }
 
-#page-pixelate {
-  text-align: center;
-  margin: 20px; }
-  #page-pixelate canvas {
-    margin-bottom: 40px;
-    border: 1px solid rgba(255, 255, 255, 0.5); }
+#page-start .btn {
+  display: block;
+  margin: 10px 40px; }
 
-.App {
+#page-pixelate canvas {
+  margin-bottom: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.5); }
+
+main > section {
   text-align: center; }
 
 .App-logo {
@@ -112,3 +110,14 @@ input[type=range]::-webkit-slider-thumb {
   cursor: pointer;
   -webkit-appearance: none;
   margin-top: -4px; }
+
+.file-upload {
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  height: 40px;
+  margin: 10px; }
+
+.file-upload + label {
+  cursor: pointer;
+  /* "hand" cursor */ }

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 export class Start extends React.Component {
     render() {
         return (
-            <section id="page-start">
+            <section>
                 <header>
                 <h1>Pixelator</h1>
                 <span> have fun in making pixel art </span>
