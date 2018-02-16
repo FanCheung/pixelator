@@ -9,7 +9,6 @@ export class CameraCapture extends Component {
     constructor(props) {
         super(props)
     }
-
     componentDidMount() {
 
         let setState = (data) =>

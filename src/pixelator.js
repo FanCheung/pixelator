@@ -13,8 +13,8 @@ work.postMessage('')
 
 export const Pixelator = (props) => {
     const onCanvasReady$ = new Subject()
-    let scale = 1
-    let blockSize = 1
+    let scale =3 
+    let blockSize = 2
 
     const resolution = 16
     const blockSize$ = new BehaviorSubject(blockSize)
@@ -102,7 +102,7 @@ export const Pixelator = (props) => {
                     <input
                         type="range"
                         name="block-size"
-                        min="1"
+                        min="2"
                         max="6"
                         ref={(e) => e ? e.value = blockSize : ''}
                         step="1"

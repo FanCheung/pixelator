@@ -15,14 +15,12 @@ body {
     font-size: 16px;
 }
 
-section {
-    padding-top: 20px;
-}
 
 h1 {
     font-size: 58px;
-    font-family: 'VT323', monospace;
-    margin: 0; // font-family: 'Pacifico', cursive;
+    // font-family: 'VT323', monospace;
+    margin: 0; 
+    font-family: 'Pacifico', cursive;
 }
 
 label {
@@ -47,13 +45,14 @@ label {
         top: 2px;
         font-size: 36px;
     }
-    button {
+    button:not(.back) {
         padding: 15px;
         border-radius: 50%;
     }
 }
 
 .nav {
+    top:0;left:0;
     position: absolute;
     z-index: 100;
 }
@@ -94,12 +93,12 @@ button.back {
 #page-pixelate {
     canvas {
         margin-bottom: 40px;
-        border: 1px solid rgba(white, 0.5);
+        // border: 1px solid rgba(white, 0.5);
     }
 }
 #page-file {
 }
-
+main{padding-top:40px;}
 main>section{
     text-align:center;
 }

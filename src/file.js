@@ -18,6 +18,10 @@ export const File = (props) => {
             props.onImageLoaded(image))
         .subscribe()
 
+    const cancel = ()=>{
+        props.onImageLoaded({})
+    }
+
     const getImage$ = (data) => {
         let image = new Image()
         image.src = data
@@ -38,7 +42,16 @@ export const File = (props) => {
                 <img src={props.imageSrc} id="preview" />
             </figure>
             {props.imageSrc ?
-                <Link to='/pixelate'><button>Pixelate It</button></Link>
+                <div>
+                    <Link to='/pixelate'>
+                        <button id="save-image">
+                            <i class="material-icons">check</i>
+                        </button>
+                    </Link>
+                    <button id="cancel" className="secondary" onClick={() => cancel()}>
+                        <i class="material-icons">close</i>
+                    </button>
+                </div>
                 :
                 <div>
                     <input type="file" className="file-upload" onChange={(e) => onFileChange$.next(e)} id="file-upload" />

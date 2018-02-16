@@ -39,6 +39,7 @@ export class App extends Component {
   }
 
   componentDidMount() {
+    this.setState({ image: {} })
     this
       .onImageLoaded$
       .map((e) => this.setState({ image: e }))
@@ -51,7 +52,7 @@ export class App extends Component {
     let pageName = this.props.location.pathname.replace('/', '')
     if (!pageName.length) pageName = 'home'
     return (
-      <main id={'page-'+pageName}>
+      <main id={'page-' + pageName}>
         <nav className="nav">
           <Back />
         </nav>
