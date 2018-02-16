@@ -9,6 +9,7 @@ export class CameraCapture extends Component {
     constructor(props) {
         super(props)
     }
+
     componentDidMount() {
 
         let setState = (data) =>
@@ -16,6 +17,9 @@ export class CameraCapture extends Component {
 
         this.capture = () => {
             const context = this.canvas.getContext('2d');
+            this.canvas.height = this.player.clientHeight
+            this.canvas.width = this.player.clientWidth
+
             context.drawImage(this.player, 0, 0, this.canvas.width, this.canvas.height)
             this.imageData = this.canvas.toDataURL()
             this.setState({ captured: true })
@@ -42,14 +46,20 @@ export class CameraCapture extends Component {
     }
 
     render() {
+        const { captured } = this.state
+
         if (this.saved)
             return <Redirect to="/pixelate" />
         return (
             <section>
-                <video className=""
-                    id="player" ref={el => this.player = el} autoPlay="true"></video>
-                <canvas className="" id="canvas" ref={el => this.canvas = el} width="320" height="240" ></canvas>
-                {this.state.captured ?
+                <figure>
+                    <video className={captured ? 'hidden' : ''}
+                        id="player" ref={el => this.player = el} autoPlay="true"></video> 
+                        <canvas className={!captured ? 'hidden' : ''} id="canvas" ref={el => this.canvas = el} ></canvas>
+
+                </figure>
+
+                {captured ?
                     <div>
                         <button id="save-image" onClick={() => this.saveImage()}>
                             <i class="material-icons">check</i>

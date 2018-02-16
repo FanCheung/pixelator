@@ -8,6 +8,9 @@ body {
   color: rgba(255, 255, 255, 0.9);
   font-size: 16px; }
 
+figure {
+  margin: 0; }
+
 h1 {
   font-size: 58px;
   margin: 0;
@@ -25,8 +28,15 @@ label {
   text-align: center; }
   #page-camera-capture video {
     width: 100%; }
+  #page-camera-capture .hidden {
+    opacity: 0; }
   #page-camera-capture canvas {
-    display: none; }
+    position: absolute;
+    z-index: 10;
+    top: 0;
+    left: 0; }
+  #page-camera-capture section {
+    position: relative; }
   #page-camera-capture button i {
     position: relative;
     top: 2px;
@@ -71,7 +81,7 @@ button.back {
   margin-bottom: 40px; }
 
 main {
-  padding-top: 40px; }
+  padding-top: 60px; }
 
 main > section {
   text-align: center; }

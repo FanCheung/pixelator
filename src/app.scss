@@ -14,7 +14,7 @@ body {
     color: $font-color;
     font-size: 16px;
 }
-
+figure{margin:0;}
 
 h1 {
     font-size: 58px;
@@ -37,8 +37,14 @@ label {
     video {
         width: 100%;
     }
+.hidden{opacity:0;}
     canvas {
-        display: none;
+        position:absolute;z-index:10;
+        top:0;
+        left:0;
+    }
+    section{
+        position:relative;
     }
     button i {
         position: relative;
@@ -98,7 +104,7 @@ button.back {
 }
 #page-file {
 }
-main{padding-top:40px;}
+main{padding-top:60px;}
 main>section{
     text-align:center;
 }
