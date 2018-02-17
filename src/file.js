@@ -26,6 +26,10 @@ export class File extends Component {
 
     componentdidMount() {
     }
+    componentWillUnmount() {
+        if (this.player)
+            this.player.srcObject.getVideoTracks().forEach(track => track.stop());
+    }
     cancel() {
         this.props.onImageLoaded({})
     }
@@ -65,7 +69,10 @@ export class File extends Component {
                     :
                     <div>
                         <input type="file" className="file-upload" onChange={(e) => this.onFileChange$.next(e)} id="file-upload" />
-                        <label htmlFor="file" className="btn">Choose a file</label>
+                        <label htmlFor="file" className="btn icon">
+                        <i className="material-icons">image</i> 
+                        <span>Choose a file</span>
+                        </label>
                     </div>}
             </section>
         )

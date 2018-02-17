@@ -6,16 +6,19 @@ export class Start extends React.Component {
         return (
             <section>
                 <header>
-                <h1>Pixelator</h1>
-                <span> have fun in making pixel art </span>
+                    <h1>Pixelator</h1>
+                    <span> have fun in making pixel art </span>
                 </header>
 
-                <Link className="btn" role="button"
+                <Link className="btn icon" role="button"
                     to='/file-upload'>
-                        Upload an image
+                    <i className="material-icons">file_upload</i>
+                    <span>Upload image</span>
                 </Link>
-                <Link className="btn" role="button"
-                to='/camera-capture' className="btn"> Take a picture</Link>
+                <Link className="btn icon" role="button"
+                    to='/camera-capture' >
+                    <i className="material-icons">photo_camera</i>
+                    <span>Take picture</span></Link>
             </section>
 
         )

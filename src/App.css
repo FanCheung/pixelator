@@ -73,6 +73,14 @@ label {
   background: #EC3D71;
   text-transform: uppercase;
   color: white; }
+  .btn.icon, button.icon {
+    display: flex;
+    align-items: center;
+    width: 70%;
+    justify-content: center;
+    margin: 20px auto; }
+    .btn.icon i, button.icon i {
+      margin-right: 5px; }
 
 button.back {
   background: none;
@@ -81,9 +89,8 @@ button.back {
 #page-home nav {
   display: none; }
 
-#page-start .btn {
-  display: block;
-  margin: 10px 40px; }
+#page-home header {
+  margin-bottom: 20px; }
 
 #page-pixelate canvas {
   margin-bottom: 40px; }
