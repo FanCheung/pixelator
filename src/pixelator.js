@@ -16,6 +16,7 @@ export class Pixelator extends Component {
     scale = 3
     blockSize = 2
     resolution = 16
+    file = null
     constructor(props) {
         super(props)
         this.blockSize$ = new BehaviorSubject(this.blockSize)
@@ -79,7 +80,8 @@ export class Pixelator extends Component {
         // CanvasHelper.drawGrid() var uri = canvas.toDataURL('image/png');
         // $('#draw-bg').css('background-image', 'url(' + uri + ')');
         this.onCanvasReady$.switchMap(sprite => {
-            console.log(props)
+            this.sprite = sprite
+
             if (!props.image.src || !sprite)
                 return Observable.never()
             const ctx = sprite.getContext('2d');
@@ -89,10 +91,17 @@ export class Pixelator extends Component {
                 .switchMap((obj) => this.blockSize$.combineLatest(this.scale$).debounceTime(500),
                     (obj, [blockSize, scale]) => drawPixels({ obj, scale, blockSize, ctx, sprite }))
         }).subscribe()
-        const openEditor = () => {
-        }
+
 
     }
+
+    saveFile() {
+        //TODO: combine it to the stream
+        this.file.href = this.sprite.toDataURL("image/png")
+        this.file.download = 'sprite.png';
+        // save to download
+    }
+
 
     componentDidMount() {
     }
@@ -128,7 +137,7 @@ export class Pixelator extends Component {
                             onChange={(e) => this.scale$.next(e.target.value)} />
                     </div>
                 </div>
-                <button onClick={() => this.openEditor()}>Open in Editor</button>
+                <a className="btn" ref={el => this.file=el} onClick={() => this.saveFile()}>Download</a>
             </section >
         )
     }
