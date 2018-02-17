@@ -1,62 +1,72 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Observable, Subject } from 'rxjs/Rx'
 import { Link } from 'react-router-dom'
 
-export const File = (props) => {
-    const onFileChange$ = new Subject()
+export class File extends Component {
 
-    onFileChange$
-        .map(e => e.target.files[0])
-        .switchMap(file => {
-            if (!file || !(file.type.indexOf("image") === 0))
-                return Observable.never()
-            if (file.type.indexOf("image") === 0)
-                return readerFile(file)
-        }).switchMap((image) =>
-            getImage$(image))
-        .do((image) =>
-            props.onImageLoaded(image))
-        .subscribe()
+    onFileChange$ = new Subject()
 
-    const cancel = ()=>{
-        props.onImageLoaded({})
+    constructor(props) {
+        super(props)
+        this.onFileChange$
+            // .do(console.log)
+            .map(e => e.target.files[0])
+            .switchMap(file => {
+                if (!file || !(file.type.indexOf("image") === 0))
+                    return Observable.never()
+                if (file.type.indexOf("image") === 0)
+                    return this.readerFile(file)
+            }).switchMap((image) =>
+                this.getImage$(image))
+            .do((image) =>
+                this.props.onImageLoaded(image))
+            .subscribe()
     }
 
-    const getImage$ = (data) => {
+    componentdidMount() {
+    }
+    cancel() {
+        this.props.onImageLoaded({})
+    }
+
+    getImage$(data) {
         let image = new Image()
         image.src = data
         return Observable.fromEvent(image, 'load').mapTo(image)
     }
 
-    const readerFile = (file) => {
+    readerFile(file) {
         let reader = new FileReader()
         reader.readAsDataURL(file)
         return Observable
             .fromEvent(reader, 'load').do(console.warn)
             .map(e => e.target.result)
     }
-    return (
-        <section>
-            <div className="adjustment"></div>
-            <figure>
-                <img src={props.imageSrc} id="preview" />
-            </figure>
-            {props.imageSrc ?
-                <div>
-                    <Link to='/pixelate'>
-                        <button id="save-image">
-                            <i class="material-icons">check</i>
+
+    render() {
+        return (
+            <section>
+                <div className="adjustment"></div>
+                <figure>
+                    <img src={this.props.imageSrc} id="preview" />
+                </figure>
+                {this.props.imageSrc ?
+                    <div>
+                        <Link to='/pixelate'>
+                            <button id="save-image">
+                                <i className="material-icons">check</i>
+                            </button>
+                        </Link>
+                        <button id="cancel" className="secondary" onClick={() => this.cancel()}>
+                            <i class="material-icons">close</i>
                         </button>
-                    </Link>
-                    <button id="cancel" className="secondary" onClick={() => cancel()}>
-                        <i class="material-icons">close</i>
-                    </button>
-                </div>
-                :
-                <div>
-                    <input type="file" className="file-upload" onChange={(e) => onFileChange$.next(e)} id="file-upload" />
-                    <label htmlFor="file" className="btn">Choose a file</label>
-                </div>}
-        </section>
-    )
+                    </div>
+                    :
+                    <div>
+                        <input type="file" className="file-upload" onChange={(e) => this.onFileChange$.next(e)} id="file-upload" />
+                        <label htmlFor="file" className="btn">Choose a file</label>
+                    </div>}
+            </section>
+        )
+    }
 }

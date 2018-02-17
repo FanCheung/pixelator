@@ -34,8 +34,13 @@ export class App extends Component {
   constructor() {
     super()
     this.state = {
-      image: {}
+      image: {},
+      title: ''
     }
+  }
+
+  setTitle(title) {
+    this.setState({ title })
   }
 
   componentDidMount() {
@@ -48,27 +53,31 @@ export class App extends Component {
   // var uri = canvas.toDataURL('image/png');
   // $('#draw-bg').css('background-image', 'url(' + uri + ')');
   render() {
-    console.log(this.props, this.state)
+    console.log(this)
     let pageName = this.props.location.pathname.replace('/', '')
     if (!pageName.length) pageName = 'home'
     return (
       <main id={'page-' + pageName}>
         <nav className="nav">
-          <Back />
+          <div className="nav-left"></div><Back />
+          <div className="nav-title">{this.state.title}</div>
+          <div className="nav-right"></div>
         </nav>
         <Switch>
           <Route path="/editor" render={() => Editor} />
           <Route path="/camera-capture"
-            render={() => <CameraCapture
+            render={() => <CameraCapture setTitle={this.setTitle.bind(this)}
               onImageLoaded={(e) => this.onImageLoaded$.next(e)}
             />} />
           <Route exact
             path="/file-upload"
             render={() => <File
               imageSrc={this.state.image.src}
+              setTitle={this.setTitle.bind(this)}
               onImageLoaded={e => this.onImageLoaded$.next(e)} />} />
           <Route exact path="/pixelate"
             render={() => <Pixelator image={this.state.image}
+              setTitle={this.setTitle.bind(this)}
               scale={1}
               blockSize={2}
             />} />

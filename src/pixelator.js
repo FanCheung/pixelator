@@ -94,7 +94,7 @@ export const Pixelator = (props) => {
     return (
         <section>
             <canvas id="sprite" ref={(e) => onCanvasReady$.next(e)}></canvas >
-            <div class="setting">
+            <div className="setting">
                 <div>
                     <label>
                         Block size

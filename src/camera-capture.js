@@ -11,7 +11,8 @@ export class CameraCapture extends Component {
     }
 
     componentDidMount() {
-
+        this.props.setTitle('Camera')
+        // console.log(this.props.setTitle)
         let setState = (data) =>
             Observable.create(obs => { this.setState(data, () => obs.next(data)) })
 
@@ -62,16 +63,16 @@ export class CameraCapture extends Component {
                 {captured ?
                     <div>
                         <button id="save-image" onClick={() => this.saveImage()}>
-                            <i class="material-icons">check</i>
+                            <i className="material-icons">check</i>
                         </button>
                         <button id="cancel" className="secondary" onClick={() => this.cancel()}>
-                            <i class="material-icons">close</i>
+                            <i className="material-icons">close</i>
                         </button>
                     </div>
                     :
                     <div>
                         <button id="capture" onClick={() => this.capture()}>
-                            <i class="material-icons">photo_camera</i>
+                            <i className="material-icons">photo_camera</i>
                         </button>
                     </div>}
             </section>
