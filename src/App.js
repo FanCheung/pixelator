@@ -59,7 +59,7 @@ export class App extends Component {
     return (
       <main id={'page-' + pageName}>
         <nav className="nav">
-          <div className="nav-left"></div><Back />
+          <div className="nav-left"><Back/></div>
           <div className="nav-title">{this.state.title}</div>
           <div className="nav-right"></div>
         </nav>

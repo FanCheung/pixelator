@@ -12,6 +12,7 @@ work.onmessage = (m) => { };
 work.postMessage('')
 
 export const Pixelator = (props) => {
+
     const onCanvasReady$ = new Subject()
     let scale =3 
     let blockSize = 2

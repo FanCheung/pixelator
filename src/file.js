@@ -8,6 +8,7 @@ export class File extends Component {
 
     constructor(props) {
         super(props)
+        this.props.setTitle('File Upload')
         this.onFileChange$
             // .do(console.log)
             .map(e => e.target.files[0])
@@ -58,7 +59,7 @@ export class File extends Component {
                             </button>
                         </Link>
                         <button id="cancel" className="secondary" onClick={() => this.cancel()}>
-                            <i class="material-icons">close</i>
+                            <i className="material-icons">close</i>
                         </button>
                     </div>
                     :
